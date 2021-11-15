@@ -25,11 +25,13 @@ class GameScene: SKScene {
     public var movingLeft: Bool = false {
         didSet {
             textL.text = "LEFT: \(String(movingLeft).uppercased())"
+            
         }
     }
     public var movingRight: Bool = false {
         didSet {
             textR.text = "RIGHT: \(String(movingRight).uppercased())"
+            
         }
     }
     
@@ -40,6 +42,7 @@ class GameScene: SKScene {
         didSet {
             textBounce.text = "BOUNCE LEVEL: \(bouncyLevel)"
             player.physicsBody?.restitution = bouncyLevel
+            
         }
     }
     
@@ -126,12 +129,11 @@ class GameScene: SKScene {
         textBounce.position = CGPoint(x: buttonBounce.position.x, y: buttonBounce.position.y - 50)
         self.addChild(buttonBounce)
         self.addChild(textBounce)
-        
-        
+
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame.inset(by: UIEdgeInsets(top: 200, left: 0, bottom: 100, right: 0)))
         
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [self] timer in
-            print(player.physicsBody?.velocity as Any?)
+            print(player.physicsBody?.velocity as Any)
             
             if (movingLeft == true) {
                 player.physicsBody?.applyForce(CGVector(dx: -200, dy: 0))
@@ -140,12 +142,14 @@ class GameScene: SKScene {
             
             if (movingRight == true) {
                 player.physicsBody?.applyForce(CGVector(dx: 200, dy: 0))
+                
             }
             
             if (player.position.y < -300) {
                 removeAllChildren()
                 let viewSize = CGRect(x: 0, y: 0, width: 00, height: 00)
                 didMove(to: SKView(frame: viewSize))
+                
             }
         }
         
