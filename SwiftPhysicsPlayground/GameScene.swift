@@ -131,6 +131,8 @@ class GameScene: SKScene {
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame.inset(by: UIEdgeInsets(top: 200, left: 0, bottom: 100, right: 0)))
         
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [self] timer in
+            print(player.physicsBody?.velocity as Any?)
+            
             if (movingLeft == true) {
                 player.physicsBody?.applyForce(CGVector(dx: -200, dy: 0))
                 
@@ -173,12 +175,16 @@ class GameScene: SKScene {
             } else if name == "Bounce" {
                 if(bouncyLevel == 0.0) {
                     bouncyLevel = 0.2
+                    
                 } else if (bouncyLevel == 0.2) {
                     bouncyLevel = 0.5
+                
                 } else if (bouncyLevel == 0.5) {
                     bouncyLevel = 1.0
+                
                 } else {
                     bouncyLevel = 0.0
+                
                 }
             }
         }
