@@ -2,7 +2,7 @@ import SwiftUI
 import SpriteKit
 import UIKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     // Object Defining Jesus theres a lot of this
     let player = SKSpriteNode(imageNamed: "playerOBJ")
     let buttonL = SKSpriteNode(imageNamed: "buttonOBJ")
@@ -10,17 +10,20 @@ class GameScene: SKScene {
     let buttonJUMP = SKSpriteNode(imageNamed: "buttonOBJ")
     let buttonSTOP = SKSpriteNode(imageNamed: "buttonOBJ")
     let buttonBounce = SKSpriteNode(imageNamed: "buttonOBJ")
+    let puffToggle = SKSpriteNode(imageNamed: "buttonOBJ")
     let pinned = SKSpriteNode(imageNamed: "playerOBJ")
     let slopeL = SKSpriteNode(imageNamed: "slopeL")
     let slopeR = SKSpriteNode(imageNamed: "slopeR")
+    let puff = SKSpriteNode(imageNamed: "puff?")
     let backdrop = SKSpriteNode(color: .gray, size: CGSize(width: 1000, height: 200))
     let backdropRim = SKSpriteNode(color: .black, size: CGSize(width: 1000, height: 10))
     let textL = SKLabelNode(text: "LEFT: FALSE")
     let textR = SKLabelNode(text: "RIGHT: FALSE")
     let textJ = SKLabelNode(text: "JUMP")
     let textS = SKLabelNode(text: "STOP")
+    let textP = SKLabelNode(text: "PUFF TOGGLE")
     let textBounce = SKLabelNode(text: "BOUNCE AMOUNT: 0.0")
-
+    
     // Booleans
     public var movingLeft: Bool = false {
         didSet {
@@ -34,6 +37,10 @@ class GameScene: SKScene {
             
         }
     }
+    public var stop: Bool = false
+    public var brake: Bool = false
+    public var ispuff: Bool = false
+    public var puffexists: Bool = true
     
     // CG
     public var buttonSize: CGSize = CGSize(width: 100, height: 100)
@@ -48,8 +55,12 @@ class GameScene: SKScene {
     
     // Integers
     public var jumpForce: Int = 3000
+    public var moveSpeed: Int = 300
+    public var puffAutoMove: Int = 20
     
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
+        
         // Backdrop
         backdrop.position = CGPoint(x: 425, y: 100)
         backdropRim.position = CGPoint(x: 425, y: 200)
@@ -84,7 +95,23 @@ class GameScene: SKScene {
         player.physicsBody?.friction = 0
         player.zPosition = 100
         player.name = "Jimmy"
+        
         addChild(player)
+        
+        
+        // Puff????
+        // yes
+        // k
+        let puffRadius = puff.frame.width / 2.0
+        puff.physicsBody = SKPhysicsBody(circleOfRadius: puffRadius)
+        puff.physicsBody?.restitution = 1
+        puff.physicsBody?.allowsRotation = true
+        puff.position = CGPoint(x: 500, y: 900)
+        puff.physicsBody?.affectedByGravity = false
+        puff.zPosition = 1000
+        puff.name = "puff"
+        addChild(puff)
+        
         
         // Button Left
         buttonL.name = "Left"
@@ -129,19 +156,42 @@ class GameScene: SKScene {
         textBounce.position = CGPoint(x: buttonBounce.position.x, y: buttonBounce.position.y - 50)
         self.addChild(buttonBounce)
         self.addChild(textBounce)
-
+        
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame.inset(by: UIEdgeInsets(top: 200, left: 0, bottom: 100, right: 0)))
         
-        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [self] timer in
+        
+        // Movement Cause I Can
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [self] timer in
+            print("Player Velocity:")
             print(player.physicsBody?.velocity as Any)
             
+            
+            print("Puff Position")
+            
+            
+            if puff.parent == nil {
+                print("Puff Is Not Here")
+                
+            } else {
+                print(puff.physicsBody?.velocity as Any)
+                
+            }
+            
+            
             if (movingLeft == true) {
-                player.physicsBody?.applyForce(CGVector(dx: -200, dy: 0))
+                if (Int((player.physicsBody?.velocity.dx)!) > -moveSpeed) {
+                    player.physicsBody?.applyForce(CGVector(dx: -moveSpeed - Int((player.physicsBody?.velocity.dx)!), dy: 0))
+                    
+                }
+                
                 
             }
             
             if (movingRight == true) {
-                player.physicsBody?.applyForce(CGVector(dx: 200, dy: 0))
+                if (Int((player.physicsBody?.velocity.dx)!) < moveSpeed) {
+                    player.physicsBody?.applyForce(CGVector(dx: moveSpeed - Int((player.physicsBody?.velocity.dx)!), dy: 0))
+                    
+                }
                 
             }
             
@@ -151,8 +201,45 @@ class GameScene: SKScene {
                 didMove(to: SKView(frame: viewSize))
                 
             }
+            
+            if (brake == true) {
+                if (Double((player.physicsBody?.velocity.dx)!) < 1) {
+                    player.physicsBody?.applyForce(CGVector(dx: 100, dy: 0))
+                    
+                } else if (Double((player.physicsBody?.velocity.dx)!) > -1) {
+                    player.physicsBody?.applyForce(CGVector(dx: -100, dy: 0))
+                    
+                }
+            }
+            
+            if puffexists {
+                // Dont crash
+                if (Int(puff.position.y) < 700) {
+                    puff.physicsBody?.velocity = CGVector(dx: (puff.physicsBody?.velocity.dx)!, dy: -((puff.physicsBody?.velocity.dy)!))
+                }
+                if (/* Greater then -20 */ (Int(puff.physicsBody!.velocity.dx) > -puffAutoMove) && (Int(puff.physicsBody!.velocity.dy) > -puffAutoMove) && /* Less then 20 */ (Int(puff.physicsBody!.velocity.dx) < puffAutoMove) && (Int(puff.physicsBody!.velocity.dy) < puffAutoMove)) {
+                    
+                    Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+                        if (/* Greater then -20 */ (Int(puff.physicsBody!.velocity.dx) > -puffAutoMove) && (Int(puff.physicsBody!.velocity.dy) > -puffAutoMove) && /* Less then 20 */ (Int(puff.physicsBody!.velocity.dx) < puffAutoMove) && (Int(puff.physicsBody!.velocity.dy) < puffAutoMove)) {
+                            puff.physicsBody?.applyForce(CGVector(dx: Int.random(in: -1000...1000), dy: Int.random(in: -1000...1000)))
+                            
+                        }
+                    }
+                }
+                
+            } else {
+                while true {
+                    // Scream
+                    print("AHHHHHHHHHHHH")
+                    
+                }
+            }
         }
-        
+    }
+    
+    func resetPuff() {
+        puff.position = CGPoint(x: 500, y: 900)
+        puff.zPosition = 1000
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -174,7 +261,8 @@ class GameScene: SKScene {
                 player.physicsBody?.applyForce(CGVector(dx: 0, dy: jumpForce))
                 
             } else if name == "Stop" {
-                player.physicsBody?.pinned.toggle()
+                brake.toggle()
+                puff.removeFromParent()
                 
             } else if name == "Bounce" {
                 if(bouncyLevel == 0.0) {
@@ -182,13 +270,13 @@ class GameScene: SKScene {
                     
                 } else if (bouncyLevel == 0.2) {
                     bouncyLevel = 0.5
-                
+                    
                 } else if (bouncyLevel == 0.5) {
                     bouncyLevel = 1.0
-                
+                    
                 } else {
                     bouncyLevel = 0.0
-                
+                    
                 }
             }
         }
