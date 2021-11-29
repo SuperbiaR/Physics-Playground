@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		723483CE273DAE46002D1C9A /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723483CD273DAE46002D1C9A /* SwiftUIView.swift */; };
 		72458FF32755629D00E4BA45 /* Music Player Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72458FF22755629D00E4BA45 /* Music Player Class.swift */; };
+		72458FF727556BCC00E4BA45 /* Custom Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72458FF627556BCC00E4BA45 /* Custom Color.swift */; };
+		72458FF92755749D00E4BA45 /* Scout_paincrticialdeath02.wav in Resources */ = {isa = PBXBuildFile; fileRef = 72458FF82755749D00E4BA45 /* Scout_paincrticialdeath02.wav */; };
 		72A78686273C6694006F38D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A78685273C6694006F38D0 /* AppDelegate.swift */; };
 		72A78688273C6694006F38D0 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 72A78687273C6694006F38D0 /* GameScene.sks */; };
 		72A7868A273C6694006F38D0 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 72A78689273C6694006F38D0 /* Actions.sks */; };
@@ -22,6 +24,8 @@
 /* Begin PBXFileReference section */
 		723483CD273DAE46002D1C9A /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		72458FF22755629D00E4BA45 /* Music Player Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Music Player Class.swift"; sourceTree = "<group>"; };
+		72458FF627556BCC00E4BA45 /* Custom Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Color.swift"; sourceTree = "<group>"; };
+		72458FF82755749D00E4BA45 /* Scout_paincrticialdeath02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scout_paincrticialdeath02.wav; sourceTree = "<group>"; };
 		72A78682273C6694006F38D0 /* SwiftPhysicsPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftPhysicsPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A78685273C6694006F38D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72A78687273C6694006F38D0 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -64,6 +68,8 @@
 		72A78684273C6694006F38D0 /* SwiftPhysicsPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				72458FF82755749D00E4BA45 /* Scout_paincrticialdeath02.wav */,
+				72458FF627556BCC00E4BA45 /* Custom Color.swift */,
 				72458FF22755629D00E4BA45 /* Music Player Class.swift */,
 				72A78685273C6694006F38D0 /* AppDelegate.swift */,
 				72A78687273C6694006F38D0 /* GameScene.sks */,
@@ -136,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72A78691273C6694006F38D0 /* Main.storyboard in Resources */,
+				72458FF92755749D00E4BA45 /* Scout_paincrticialdeath02.wav in Resources */,
 				72A78688273C6694006F38D0 /* GameScene.sks in Resources */,
 				72A78693273C6697006F38D0 /* Assets.xcassets in Resources */,
 				72A78696273C6697006F38D0 /* LaunchScreen.storyboard in Resources */,
@@ -152,6 +159,7 @@
 			files = (
 				72A7868C273C6694006F38D0 /* GameScene.swift in Sources */,
 				72458FF32755629D00E4BA45 /* Music Player Class.swift in Sources */,
+				72458FF727556BCC00E4BA45 /* Custom Color.swift in Sources */,
 				72A7868E273C6694006F38D0 /* GameViewController.swift in Sources */,
 				723483CE273DAE46002D1C9A /* SwiftUIView.swift in Sources */,
 				72A78686273C6694006F38D0 /* AppDelegate.swift in Sources */,

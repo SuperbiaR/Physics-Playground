@@ -2,6 +2,8 @@ import SwiftUI
 import SpriteKit
 import UIKit
 
+class pinnedOBJ: SKSpriteNode { }
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     // Object Defining Jesus theres a lot of this
     let player = SKSpriteNode(imageNamed: "playerOBJ")
@@ -10,7 +12,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let buttonJUMP = SKSpriteNode(imageNamed: "buttonOBJ")
     let buttonSTOP = SKSpriteNode(imageNamed: "buttonOBJ")
     let buttonBounce = SKSpriteNode(imageNamed: "buttonOBJ")
-    let puffToggle = SKSpriteNode(imageNamed: "buttonOBJ")
+    let buttonPuffToggle = SKSpriteNode(imageNamed: "buttonOBJ")
     let pinned = SKSpriteNode(imageNamed: "playerOBJ")
     let slopeL = SKSpriteNode(imageNamed: "slopeL")
     let slopeR = SKSpriteNode(imageNamed: "slopeR")
@@ -23,6 +25,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let textS = SKLabelNode(text: "STOP")
     let textP = SKLabelNode(text: "PUFF TOGGLE")
     let textBounce = SKLabelNode(text: "BOUNCE AMOUNT: 0.0")
+    let logicNode = SKNode()
+    
+    
+    // SKActions
+    let audioDead = SKAction.playSoundFileNamed("Scout_paincrticialdeath02", waitForCompletion: false)
+    
     
     // Booleans
     public var movingLeft: Bool = false {
@@ -57,6 +65,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     public var jumpForce: Int = 3000
     public var moveSpeed: Int = 300
     public var puffAutoMove: Int = 20
+    public var loomingThreatLevel: Int = 0
+    public var bumperAmount: Int = 10 {
+        didSet {
+            resetAll()
+        }
+    }
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -68,11 +82,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(backdropRim)
         addChild(backdrop)
         
-        pinned.physicsBody = SKPhysicsBody(texture: pinned.texture!, size: pinned.size)
-        pinned.position = CGPoint(x: 320, y: 320)
-        pinned.zRotation = CGFloat.pi / 2
-        pinned.physicsBody?.pinned = true
-        addChild(pinned)
+        
+        for _ in 1...bumperAmount {
+            let bumper = pinnedOBJ(imageNamed: "playerOBJ")
+            bumper.physicsBody = SKPhysicsBody(texture: pinned.texture!, size: pinned.size)
+            bumper.position = CGPoint(x: 320, y: 600)
+            bumper.zRotation = CGFloat.pi / 2
+            bumper.physicsBody?.pinned = false
+            bumper.physicsBody?.restitution = 1
+            addChild(bumper)
+            bumper.physicsBody?.applyForce(CGVector(dx: Int.random(in: -10000...10000), dy: Int.random(in: -1000...1000)))
+            
+            Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+                bumper.physicsBody?.pinned.toggle()
+                
+            }
+        }
         
         slopeL.position = CGPoint(x: 40, y: 245)
         slopeL.physicsBody = SKPhysicsBody(texture: slopeL.texture!, size: slopeL.size)
@@ -152,10 +177,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Bounce Change Button
         buttonBounce.name = "Bounce"
         buttonBounce.size = CGSize(width: 50, height: 50)
-        buttonBounce.position = CGPoint(x: (buttonR.position.x + buttonL.position.x)/2, y: 1150)
+        buttonBounce.position = CGPoint(x: (buttonR.position.x + buttonL.position.x)/2 + 150, y: 1150)
         textBounce.position = CGPoint(x: buttonBounce.position.x, y: buttonBounce.position.y - 50)
+        textBounce.fontColor = .white
         self.addChild(buttonBounce)
         self.addChild(textBounce)
+        
+        // Puff Toggle Button
+        buttonPuffToggle.name = "Puff Toggle"
+        buttonPuffToggle.size = CGSize(width: 50, height: 50)
+        buttonPuffToggle.position = CGPoint(x: (buttonR.position.x + buttonL.position.x)/2 - 150, y: 1150)
+        textP.position = CGPoint(x: buttonPuffToggle.position.x, y: buttonPuffToggle.position.y - 50)
+        textP.fontColor = .systemPink
+        self.addChild(buttonPuffToggle)
+        self.addChild(textP)
         
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame.inset(by: UIEdgeInsets(top: 200, left: 0, bottom: 100, right: 0)))
         
@@ -196,9 +231,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             if (player.position.y < -300) {
-                removeAllChildren()
-                let viewSize = CGRect(x: 0, y: 0, width: 00, height: 00)
-                didMove(to: SKView(frame: viewSize))
+                resetAll()
                 
             }
             
@@ -237,9 +270,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func resetPuff() {
-        puff.position = CGPoint(x: 500, y: 900)
-        puff.zPosition = 1000
+    func playSound(sound : SKAction) {
+        run(sound)
+        
+    }
+    
+    func resetAll() {
+        removeAllChildren()
+        let viewSize = CGRect(x: 0, y: 0, width: 00, height: 00)
+        didMove(to: SKView(frame: viewSize))
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -262,7 +302,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
             } else if name == "Stop" {
                 brake.toggle()
-                puff.removeFromParent()
                 
             } else if name == "Bounce" {
                 if(bouncyLevel == 0.0) {
@@ -276,6 +315,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                 } else {
                     bouncyLevel = 0.0
+                    
+                }
+                
+            } else if name == "Puff Toggle"{
+                if (puff.parent != nil) {
+                    puff.removeFromParent()
+                    playSound(sound: audioDead)
+                    
+                } else {
+                    self.addChild(puff)
                     
                 }
             }
