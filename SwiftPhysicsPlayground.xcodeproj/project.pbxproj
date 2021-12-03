@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		722ECF4427594261006B46FA /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722ECF4327594261006B46FA /* TitleScreen.swift */; };
+		722ECF4627594792006B46FA /* IntroScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 722ECF4527594792006B46FA /* IntroScene.sks */; };
 		723483CE273DAE46002D1C9A /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723483CD273DAE46002D1C9A /* SwiftUIView.swift */; };
 		72458FF727556BCC00E4BA45 /* Custom Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72458FF627556BCC00E4BA45 /* Custom Color.swift */; };
 		72458FF92755749D00E4BA45 /* Scout_paincrticialdeath02.wav in Resources */ = {isa = PBXBuildFile; fileRef = 72458FF82755749D00E4BA45 /* Scout_paincrticialdeath02.wav */; };
@@ -18,9 +20,12 @@
 		72A78691273C6694006F38D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A7868F273C6694006F38D0 /* Main.storyboard */; };
 		72A78693273C6697006F38D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72A78692273C6697006F38D0 /* Assets.xcassets */; };
 		72A78696273C6697006F38D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72A78694273C6697006F38D0 /* LaunchScreen.storyboard */; };
+		72F7F013275A98AD00F8BCBB /* Function Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F7F012275A98AD00F8BCBB /* Function Storage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		722ECF4327594261006B46FA /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
+		722ECF4527594792006B46FA /* IntroScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = IntroScene.sks; sourceTree = "<group>"; };
 		723483CD273DAE46002D1C9A /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		72458FF627556BCC00E4BA45 /* Custom Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Color.swift"; sourceTree = "<group>"; };
 		72458FF82755749D00E4BA45 /* Scout_paincrticialdeath02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scout_paincrticialdeath02.wav; sourceTree = "<group>"; };
@@ -33,6 +38,7 @@
 		72A78690273C6694006F38D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		72A78692273C6697006F38D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72A78695273C6697006F38D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		72F7F012275A98AD00F8BCBB /* Function Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Function Storage.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +55,10 @@
 		721B27352756B16A0004CA11 /* Custom Code Bits */ = {
 			isa = PBXGroup;
 			children = (
+				722ECF4327594261006B46FA /* TitleScreen.swift */,
 				72458FF627556BCC00E4BA45 /* Custom Color.swift */,
+				72458FF82755749D00E4BA45 /* Scout_paincrticialdeath02.wav */,
+				72F7F012275A98AD00F8BCBB /* Function Storage.swift */,
 			);
 			path = "Custom Code Bits";
 			sourceTree = "<group>";
@@ -75,15 +84,15 @@
 			isa = PBXGroup;
 			children = (
 				721B27352756B16A0004CA11 /* Custom Code Bits */,
-				72458FF82755749D00E4BA45 /* Scout_paincrticialdeath02.wav */,
 				72A78685273C6694006F38D0 /* AppDelegate.swift */,
 				72A78687273C6694006F38D0 /* GameScene.sks */,
 				72A78689273C6694006F38D0 /* Actions.sks */,
+				722ECF4527594792006B46FA /* IntroScene.sks */,
 				72A7868B273C6694006F38D0 /* GameScene.swift */,
 				72A7868D273C6694006F38D0 /* GameViewController.swift */,
 				72A7868F273C6694006F38D0 /* Main.storyboard */,
-				72A78692273C6697006F38D0 /* Assets.xcassets */,
 				72A78694273C6697006F38D0 /* LaunchScreen.storyboard */,
+				72A78692273C6697006F38D0 /* Assets.xcassets */,
 			);
 			path = SwiftPhysicsPlayground;
 			sourceTree = "<group>";
@@ -147,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72A78691273C6694006F38D0 /* Main.storyboard in Resources */,
+				722ECF4627594792006B46FA /* IntroScene.sks in Resources */,
 				72458FF92755749D00E4BA45 /* Scout_paincrticialdeath02.wav in Resources */,
 				72A78688273C6694006F38D0 /* GameScene.sks in Resources */,
 				72A78693273C6697006F38D0 /* Assets.xcassets in Resources */,
@@ -164,6 +174,8 @@
 			files = (
 				72A7868C273C6694006F38D0 /* GameScene.swift in Sources */,
 				72458FF727556BCC00E4BA45 /* Custom Color.swift in Sources */,
+				722ECF4427594261006B46FA /* TitleScreen.swift in Sources */,
+				72F7F013275A98AD00F8BCBB /* Function Storage.swift in Sources */,
 				72A7868E273C6694006F38D0 /* GameViewController.swift in Sources */,
 				723483CE273DAE46002D1C9A /* SwiftUIView.swift in Sources */,
 				72A78686273C6694006F38D0 /* AppDelegate.swift in Sources */,

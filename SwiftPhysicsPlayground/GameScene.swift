@@ -26,7 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let buttonSTOP = SKSpriteNode(imageNamed: "buttonOBJ")
     let buttonBounce = SKSpriteNode(imageNamed: "buttonOBJ")
     let buttonPuffToggle = SKSpriteNode(imageNamed: "buttonOBJ")
-    let pinned = SKSpriteNode(imageNamed: "playerOBJ")
+    let pinned = SKSpriteNode(imageNamed: "obstacleOBJ")
     let slopeL = SKSpriteNode(imageNamed: "slopeL")
     let slopeR = SKSpriteNode(imageNamed: "slopeR")
     let puff = SKSpriteNode(imageNamed: "puff?")
@@ -99,6 +99,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         let playerRadius = player.frame.width / 2.0
         
+        createOBJ(Sprite: SKSpriteNode(imageNamed: "playerOBJ"), size: nil, POS: CGPoint(x: 500, y: 500), canRotate: false, gravity: false, bounce: 0, friction: 0, zPOS: 100, pinned: true, typeOBJ: "SPHERE")
+        
         // Backdrop
         backdrop.position = CGPoint(x: 425, y: 100)
         backdrop.zPosition = 0.1
@@ -140,22 +142,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Setting up the spinning bumpers
         for _ in 1...bumperAmount {
-            let bumper = pinnedOBJ(imageNamed: "playerOBJ")
-            bumper.physicsBody = SKPhysicsBody(circleOfRadius: playerRadius + 50)
-            bumper.position = CGPoint(x: 400, y: 800)
-            bumper.zRotation = CGFloat.pi / 2
-            bumper.physicsBody?.pinned = false
-            bumper.physicsBody?.restitution = 1
-            bumper.zPosition = 3
-            addChild(bumper)
-            bumper.physicsBody?.applyForce(CGVector(dx: Int.random(in: -10000...10000), dy: Int.random(in: -1000...1000)))
-
-            Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-                try? self.platformBoundarary.removeFromParent()
-                bumper.physicsBody = SKPhysicsBody(circleOfRadius: playerRadius)
-                bumper.physicsBody?.pinned.toggle()
-                
-            }
+            createOBJ(Sprite: pinnedOBJ(imageNamed: "obstacleOBJ"), size: nil, POS: CGPoint(x: 400, y: 800), canRotate: true, gravity: false, bounce: 1, friction: 0, zPOS: 3, pinned: false, typeOBJ: "SPHERE SPINNING")
+            
+            //            let bumper = pinnedOBJ(imageNamed: "obstacleOBJ")
+            //            bumper.physicsBody = SKPhysicsBody(circleOfRadius: playerRadius + 50)
+            //            bumper.position = CGPoint(x: 400, y: 800)
+            //            bumper.zRotation = CGFloat.pi / 2
+            //            bumper.physicsBody?.pinned = false
+            //            bumper.physicsBody?.restitution = 1
+            //            bumper.zPosition = 3
+            //            addChild(bumper)
+            //            bumper.physicsBody?.applyForce(CGVector(dx: Int.random(in: -10000...10000), dy: Int.random(in: -1000...1000)))
+            //
+            //            Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+            //                try? self.platformBoundarary.removeFromParent()
+            //                bumper.physicsBody = SKPhysicsBody(circleOfRadius: playerRadius)
+            //                bumper.physicsBody?.pinned.toggle()
+            //
+            //            }
         }
         
         // Left Slope
@@ -393,7 +397,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if (puff.parent != nil) {
                     puff.removeFromParent()
                     playSound(sound: audioDead)
-                    loomingThreatLevel += 0.02
+                    loomingThreatLevel += 1
                     if loomingThreatLevel >= 1 {
                         imminentDoom.zPosition += 1
                         
@@ -410,6 +414,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.addChild(puff)
                     
                 }
+            }
+        }
+    }
+    
+    // Creating an Object through a Function
+    func createOBJ(Sprite: SKSpriteNode, size: CGSize?, POS: CGPoint, canRotate: Bool, gravity: Bool, bounce: CGFloat, friction: CGFloat, zPOS: CGFloat, pinned: Bool, typeOBJ: String) {
+        let finalOBJ: SKSpriteNode = Sprite
+        
+        if (typeOBJ == "SPHERE") { /* Circle Objects */
+            finalOBJ.physicsBody = SKPhysicsBody(circleOfRadius: finalOBJ.frame.width / 2.0)
+            finalOBJ.physicsBody?.affectedByGravity = gravity
+            finalOBJ.physicsBody?.restitution = bounce
+            finalOBJ.physicsBody?.friction = friction
+            finalOBJ.physicsBody?.pinned = pinned
+            finalOBJ.zPosition = zPOS
+            finalOBJ.position = POS
+            
+        } else if (typeOBJ == "SPHERE SPINNING") { /* Bumper Objects */
+            finalOBJ.physicsBody = SKPhysicsBody(circleOfRadius: (finalOBJ.frame.width / 2.0) + 50)
+            finalOBJ.physicsBody?.affectedByGravity = gravity
+            finalOBJ.physicsBody?.restitution = bounce
+            finalOBJ.physicsBody?.friction = 1
+            finalOBJ.physicsBody?.pinned = pinned
+            finalOBJ.zPosition = zPOS
+            finalOBJ.position = POS
+            finalOBJ.physicsBody?.allowsRotation = true
+        }
+        
+        self.addChild(finalOBJ)
+        
+        // Excess After Spawn Doings
+        if typeOBJ == "SPHERE SPINNING" {
+            finalOBJ.physicsBody?.applyForce(CGVector(dx: Int.random(in: -10000...10000), dy: Int.random(in: -1000...1000)))
+            
+            Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+                try? self.platformBoundarary.removeFromParent()
+                finalOBJ.physicsBody = SKPhysicsBody(circleOfRadius: finalOBJ.frame.width / 2.0)
+                finalOBJ.physicsBody?.pinned.toggle()
+                finalOBJ.physicsBody?.allowsRotation = true
+                
             }
         }
     }
