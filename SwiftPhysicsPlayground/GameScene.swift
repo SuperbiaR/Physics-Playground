@@ -202,6 +202,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         puff.name = "puff"
         addChild(puff)
         
+        
         // Button Left
         buttonL.name = "Left"
         buttonL.size = buttonSize
